@@ -10,33 +10,36 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      // belongsTo
+      Product.hasOne(models.OrderDetail, {
+        foreignKey: 'product_id',
+        as: "orderdetails"
+      });
+
       Product.belongsTo(models.Brand);
-      // belongsTo
-      Product.belongsTo(models.User);
 
-      // belongsToMany
-      Product.belongsToMany(models.Color, {
-        as: 'colors',
-        through: 'colorProduct',
-      });
-      // belongsToMany
-      Product.belongsToMany(models.Category, {
-        as: 'categories',
-        through: 'CategoryProduct',
+      Product.belongsTo(models.Category);
 
+      Product.belongsTo(models.Size);
+
+      Product.belongsTo(models.Gender);
+
+      Product.hasMany(models.Image, {
+        foreignKey: 'product_id',
+        as: "images"
       });
+
     }
   };
   Product.init({
     name: DataTypes.STRING,
-    description: DataTypes.TEXT,
     price: DataTypes.DECIMAL,
-    image: DataTypes.STRING,
-    keywords: DataTypes.TEXT,
-    userId: DataTypes.INTEGER,
-    brandId: DataTypes.INTEGER
+    stock: DataTypes.INTEGER,
+    stock_min: DataTypes.INTEGER,
+    stock_max: DataTypes.INTEGER,
+    brand_id: DataTypes.INTEGER,
+    category_id: DataTypes.INTEGER,
+    size_id: DataTypes.INTEGER,
+    gender_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Product',
